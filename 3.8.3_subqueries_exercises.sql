@@ -142,22 +142,6 @@ SELECT
 	COUNT(*) AS total,
 	(COUNT(*) / (SELECT
 					COUNT(*)
-					FROM salaries
-					WHERE to_date > NOW()) * 100) AS percent_of_total
-FROM salaries
-WHERE salary > (
-	SELECT
-	MAX(salary) - STD(s.salary)
-	FROM salaries AS s
-	)
-AND to_date > NOW();
-
-# What percentage of all salaries is this?
-
-SELECT
-	COUNT(*) AS total,
-	(COUNT(*) / (SELECT
-					COUNT(*)
 					FROM salaries) *100) AS percent_of_total
 FROM salaries
 WHERE salary > (
