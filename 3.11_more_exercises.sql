@@ -83,14 +83,47 @@ FROM actor
 WHERE last_name LIKE "%li%"
 ORDER BY last_name, first_name;
 
+-- 5. Using IN, display the country_id and country columns for the following countries: Afghanistan, Bangladesh, and China:
+
+SELECT
+	country_id,
+	country
+FROM country
+WHERE country IN ("Afghanistan", "Bangladesh", "China");
+
+-- 6. List the last names of all the actors, as well as how many actors have that last name.
+
+SELECT
+	last_name,
+	COUNT(*)
+FROM actor
+GROUP BY last_name;
+
+-- 7. List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
+
+SELECT
+	last_name,
+	COUNT(*)
+FROM actor
+WHERE last_name > 1
+GROUP BY last_name;
+
+
+
+
+
+
+
+
+
 
 /*
 
 
 
-Using IN, display the country_id and country columns for the following countries: Afghanistan, Bangladesh, and China:
-List the last names of all the actors, as well as how many actors have that last name.
-List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
+
+
+
 You cannot locate the schema of the address table. Which query would you use to re-create it?
 Use JOIN to display the first and last names, as well as the address, of each staff member.
 Use JOIN to display the total amount rung up by each staff member in August of 2005.
