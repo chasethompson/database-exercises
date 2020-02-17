@@ -157,31 +157,89 @@ WHERE title = "Hunchback Impossible";
 -- USE subqueries TO display the titles of movies starting WITH the letters K AND Q whose LANGUAGE IS English.
 
 SELECT
-	*
+	title
 FROM film
-WHERE title LIKE "K%"
-OR title LIKE "Q%;"
+WHERE title LIKE "k%"
+OR title LIKE "q%"
 AND language_id IN (
 	SELECT
 	language_id
 	FROM LANGUAGE
-	WHERE NAME = "engligh");
-	
-SELECT
-	title
-FROM film 
-WHERE title LIKE 'k%'
-OR title LIKE 'q%'
-AND language_id IN (
-	SELECT language_id
-	FROM LANGUAGE
 	WHERE NAME = "English");
-	
-	SELECT title FROM film
-JOIN LANGUAGE USING(language_id)
-WHERE language.name="English"
-AND title LIKE "K%"
-OR title LIKE "Q%";
+
+-- 14. Use subqueries to display all actors who appear in the film Alone Trip.
+
+SELECT
+	CONCAT(first_name, " ", last_name) AS full_name
+FROM actor
+WHERE actor_id IN (
+	SELECT actor_id
+	FROM film_actor
+	WHERE film_id IN (
+		SELECT film_id
+		FROM film
+		WHERE title = "Alone Trip"
+	)
+);
+
+-- 15. You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers.
+
+SELECT
+	first_name,
+	last_name,
+	email
+FROM customer
+JOIN address USING(address_id)
+JOIN city USING(city_id)
+JOIN country USING(country_id)
+WHERE country="Canada";
+
+-- 16. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as famiy films.
+
+SELECT
+	f.title,
+	c.name
+FROM film f
+JOIN film_category USING(film_id)
+JOIN category c USING (category_id)
+WHERE c.name = "Family";
+
+-- 17. Write a query to display how much business, in dollars, each store brought in.
+
+SELECT
+	store_id,
+	SUM(amount)
+FROM payment
+JOIN staff USING(staff_id)
+JOIN store USING(store_id)
+GROUP BY store_id
+;
+
+-- 18. Write a query to display for each store its store ID, city, and country.
+
+SELECT
+	s.store_id,
+	city.city,
+	c.country
+FROM country c
+JOIN city city USING(country_id)
+JOIN address USING(city_id)
+JOIN store s USING (address_id);
+
+-- 19. List the top five genres in gross revenue in descending order. (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.)
+
+SELECT
+	cat.name AS genre,
+	sum(amount) AS gross_revenue
+FROM category cat
+JOIN film_category USING(category_id)
+JOIN film USING(film_id)
+JOIN inventory USING(film_id)
+JOIN rental USING(inventory_id)
+JOIN payment USING(rental_id)
+GROUP BY genre
+ORDER BY gross_revenue DESC
+LIMIT 5;
 
 
 /*
@@ -190,10 +248,11 @@ OR title LIKE "Q%";
 
 
 
-The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the letters K and Q have also soared in popularity. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
-Use subqueries to display all actors who appear in the film Alone Trip.
-You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers.
-Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as famiy films.
-Write a query to display how much business, in dollars, each store brought in.
-Write a query to display for each store its store ID, city, and country.
-List the top five genres in gross revenue in descending order. (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.) */
+
+
+
+
+
+
+
+ */
