@@ -105,16 +105,83 @@ SELECT
 	last_name,
 	COUNT(*)
 FROM actor
-WHERE last_name > 1
-GROUP BY last_name;
+GROUP BY last_name
+HAVING COUNT(last_name) > 1;
 
+-- 8. You cannot locate the schema of the address table. Which query would you use to re-create it?
 
+SHOW CREATE TABLE address;
 
+DESCRIBE address;
 
+-- 9. Use JOIN to display the first and last names, as well as the address, of each staff member.
 
+SELECT
+	first_name,
+	last_name,
+	address
+FROM staff
+JOIN address USING(address_id);
 
+-- 10. Use JOIN to display the total amount rung up by each staff member in August of 2005.
 
+SELECT
+	first_name,
+	last_name,
+	SUM(amount)
+FROM staff
+JOIN payment p USING(staff_id)
+WHERE payment_date BETWEEN "2005-08-01" AND "2005-08-31"
+GROUP BY staff_id;
 
+-- 11. List each film and the number of actors who are listed for that film.
+
+SELECT
+	title,
+	COUNT(actor_id)
+FROM film
+JOIN film_actor fa USING(film_id)
+GROUP BY title;
+
+-- 12. How many copies of the film Hunchback Impossible exist in the inventory system?
+
+SELECT
+	title,
+	COUNT(*)
+FROM film
+JOIN inventory i USING (film_id)
+WHERE title = "Hunchback Impossible";
+
+-- 13. The music of Queen and Kris Kristofferson have seen an unlikely resurgence.
+-- AS an unintended consequence, films starting WITH the letters K AND Q have also soared IN popularity.
+-- USE subqueries TO display the titles of movies starting WITH the letters K AND Q whose LANGUAGE IS English.
+
+SELECT
+	*
+FROM film
+WHERE title LIKE "K%"
+OR title LIKE "Q%;"
+AND language_id IN (
+	SELECT
+	language_id
+	FROM LANGUAGE
+	WHERE NAME = "engligh");
+	
+SELECT
+	title
+FROM film 
+WHERE title LIKE 'k%'
+OR title LIKE 'q%'
+AND language_id IN (
+	SELECT language_id
+	FROM LANGUAGE
+	WHERE NAME = "English");
+	
+	SELECT title FROM film
+JOIN LANGUAGE USING(language_id)
+WHERE language.name="English"
+AND title LIKE "K%"
+OR title LIKE "Q%";
 
 
 /*
@@ -123,12 +190,6 @@ GROUP BY last_name;
 
 
 
-
-You cannot locate the schema of the address table. Which query would you use to re-create it?
-Use JOIN to display the first and last names, as well as the address, of each staff member.
-Use JOIN to display the total amount rung up by each staff member in August of 2005.
-List each film and the number of actors who are listed for that film.
-How many copies of the film Hunchback Impossible exist in the inventory system?
 The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the letters K and Q have also soared in popularity. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
 Use subqueries to display all actors who appear in the film Alone Trip.
 You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers.
